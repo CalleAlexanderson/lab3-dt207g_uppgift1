@@ -55,8 +55,30 @@ app.post("/workposts", async(req, res) =>{
     }
 })
 
-app.get("/api", (req,res) =>{
-    res.json({message: "API is working, welcome"})
+app.put("/workposts/:id", async(req, res) =>{
+    try {
+        let result = await workPost.updateOne({_id: req.params.id}, 
+            {$set: {
+                "companyName": req.body.companyName,
+                "jobTitle": req.body.jobTitle,
+                "location": req.body.location,
+                "description": req.body.description
+            }});
+
+        return res.json(result);
+    } catch(err){
+        return res.status(400).json(err);
+    }
+})
+
+app.delete("/workposts/:id", async(req, res) =>{
+    try {
+        let result = await workPost.deleteOne({_id: req.params.id});
+
+        return res.json(result);
+    } catch(err){
+        return res.status(400).json(err);
+    }
 })
 
 app.listen(port, ()=>{
